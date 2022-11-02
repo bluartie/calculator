@@ -1,0 +1,62 @@
+*,
+*::before,
+*::after {
+    margin: 0;
+    
+    border-radius: .5rem;
+    box-sizing: border-box;
+    
+}
+
+.outer-area {
+    padding-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.calc-outline {
+    padding: 1rem;
+    background: #DCDCDC;
+    border: 2px solid black;
+}
+
+.output-container {
+    text-align: end;
+    padding-right: 20px;
+    background: lightcyan;
+    border: 2px solid black;
+}
+
+.last-operation {
+    font-size: 1.5rem;
+}
+
+.current-operation {
+    font-size:2rem;
+}
+
+.btns {
+    display: flex;
+    justify-content: space-around;
+}
+
+.clear-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.bbtn {
+    padding: 1rem 3.0rem;
+    margin: .5rem;
+    border: 2px solid black;
+}
+
+.btn {
+    text-decoration: none;
+    padding: 1.4rem 1.8rem;
+    margin: .25rem;
+    border: 2px solid black;
+    background: #fedddd;
+}
