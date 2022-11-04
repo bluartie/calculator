@@ -25,6 +25,8 @@
 .output-container {
     text-align: end;
     padding-right: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
     background: lightcyan;
     border: 2px solid black;
 }
@@ -35,6 +37,7 @@
 
 .current-operation {
     font-size:2rem;
+    
 }
 
 .btns {
