@@ -34,7 +34,6 @@ for (i of btns) {
       if (operatorInMemory === null) {
         if (displayScreen.innerText == "0" || shouldResetScreen == true) {
           displayScreen.innerText = e.target.innerText
-          shouldResetScreen = false
         } else {
         displayScreen.innerText += e.target.innerText;
 
@@ -91,8 +90,12 @@ deleteBtn.addEventListener("click", () =>{
     
 if (displayScreen.innerText.length == 1) {
     displayScreen.innerText="0"
-} 
-    else if (displayScreen.innerText.length > 1) {
+    operatorInMemory = null
+    operandOne = ""
+    operandTwo = ""
+    shouldResetScreen = false
+    document.querySelector(".dot").disabled = false
+}   else if (displayScreen.innerText.length > 1) {
         displayScreen.innerText = displayScreen.innerText.substring(0, displayScreen.innerText.length - 1)
     }
 })
