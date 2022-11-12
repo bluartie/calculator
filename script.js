@@ -34,6 +34,7 @@ for (i of btns) {
       if (operatorInMemory === null) {
         if (displayScreen.innerText == "0" || shouldResetScreen == true) {
           displayScreen.innerText = e.target.innerText
+          shouldResetScreen = false
         } else {
         displayScreen.innerText += e.target.innerText;
 
@@ -96,6 +97,7 @@ if (displayScreen.innerText.length == 1) {
     }
 })
 }
+
 function clearDisplay() {
 let clearBtn = document.querySelector(".clear")
 clearBtn.addEventListener("click", () => {
@@ -103,6 +105,7 @@ clearBtn.addEventListener("click", () => {
     operatorInMemory = null
     operandOne = ""
     operandTwo = ""
+    shouldResetScreen = false
     document.querySelector(".dot").disabled = false
 })}
 
@@ -115,7 +118,6 @@ function operationType(operator, x, y) {
     if (operator == "*") {return multiply(x, y)} 
     if (operator == "/") {return divide(x, y)} 
 };
-
 
 function roundResult(number) {
     return Math.round(number*1000) / 1000
