@@ -1,12 +1,9 @@
-/*
-allow for decimals and negatives in regex
-    conditional that if a given number (from the array) has a decimal, parseFloat, if not, parseInteger
-
-
-*/
-
-
 let displayScreen = document.querySelector(".current-operation");
+let operatorInMemory = null
+let operandOne = ""
+let operandTwo = ""
+let shouldResetScreen = false
+
 
 btnActions();
 
@@ -17,60 +14,75 @@ function btnActions() {
     equalBtnActions();
     dotBtnActions();
 };
+
 function equalBtnActions() {
     let equalBtn = document.querySelector(".equal");
 equalBtn.addEventListener("click", () => {
+    if (operatorInMemory === null) return
+    else {
     solve()
+    shouldResetScreen = true
     document.querySelector(".dot").disabled = false;
-})};
+}})};
 
 function numberBtnActions() {
 let btns = document.querySelectorAll(".num");
 for (i of btns) {
     i.addEventListener("click", function(e) {
       console.log(e.target.innerText)
-      if (displayScreen.innerText == "0") {
+
+      if (operatorInMemory === null) {
+        if (displayScreen.innerText == "0" || shouldResetScreen == true) {
           displayScreen.innerText = e.target.innerText
-      } else {
-      displayScreen.innerText += e.target.innerText;
-      }
+        } else {
+        displayScreen.innerText += e.target.innerText;
+
+    }} else {
+        if (operatorInMemory !== null && shouldResetScreen == true) {
+            displayScreen.innerText = e.target.innerText
+            shouldResetScreen = false
+        } else {
+            displayScreen.innerText += e.target.innerText
+        }
+
+    }
     });
   }
 }
+
 function operatorBtnActions() {
     let btns = document.querySelectorAll(".op");
     for (i of btns) {
         i.addEventListener("click", function(e) {
-
-         if ((/[\+\-\/\*]/g.test(displayScreen.innerText) == true) && (/[\+\-\/\*]/g.test(displayScreen.innerText.slice(-1)) == false)) {
-            solve();
-            displayScreen.innerText += e.target.innerText;
-         } else if (/[\+\-\/\*\.]/g.test(displayScreen.innerText.slice(-1)) == true) {
-            return;
-         } else {
-            document.querySelector(".dot").disabled = false;
-          displayScreen.innerText += e.target.innerText;
+        if (operatorInMemory !== null) {
+            solve()
+            operatorInMemory = e.target.innerText
+            shouldResetScreen = true
+        } else {
+            operatorInMemory = e.target.innerText
+            operandOne = displayScreen.innerText
+            shouldResetScreen = true
+            console.log(e.target.innerText)
         }
-        console.log(/[\+\-\/\*]/g.test(displayScreen.innerText) == true);
-      })
-
-}};
+        document.querySelector(".dot").disabled = false
+})}};
 
 function dotBtnActions () {
     let dot = document.querySelector(".dot")
     dot.addEventListener("click", function(e) {
-    if (/[\+\-\/\*\.]/g.test(displayScreen.innerText.slice(-1)) == true) {return}
-    else {
         document.querySelector(".dot").disabled = true;
-        displayScreen.innerText += e.target.innerText
+        if (shouldResetScreen == true) {
+            displayScreen.innerText = e.target.innerText
+            shouldResetScreen = false
+        }
+        else {displayScreen.innerText += e.target.innerText}
     }
-})};
+)};
 
 function displayBtnActions() {
     clearDisplay();
     deleteLastChar();
     };
-    
 
 function deleteLastChar () {
 let deleteBtn = document.querySelector(".delete")
@@ -88,37 +100,38 @@ function clearDisplay() {
 let clearBtn = document.querySelector(".clear")
 clearBtn.addEventListener("click", () => {
     displayScreen.innerText = "0"
-    document.querySelector(".dot").disabled = false;
+    operatorInMemory = null
+    operandOne = ""
+    operandTwo = ""
+    document.querySelector(".dot").disabled = false
 })}
 
-// /[-]?[0-9]+([\.][0-9]+)?+/g
-///\d+/g
+function operationType(operator, x, y) {
+    x = parseFloat(x)
+    y = parseFloat(y)
+
+    if (operator == "+") {return add(x, y)} 
+    if (operator == "-") {return subtract(x, y)} 
+    if (operator == "*") {return multiply(x, y)} 
+    if (operator == "/") {return divide(x, y)} 
+};
+
+
+function roundResult(number) {
+    return Math.round(number*1000) / 1000
+}
+
 function solve() {
-    let list = displayScreen.innerText.match(/[-]?[0-9]*\.?[0-9]+/g);
-    console.log(list);
-    let numArray = []
-    if (list[0].includes(".") === true) {
-        numArray.push(parseFloat(list[0]))
+    if (operatorInMemory === null || shouldResetScreen) return
+    if (operatorInMemory === "/" && displayScreen === "0") {
+        displayScreen.textContent = "ERROR"
     } else {
-    numArray.push(parseInt(list[0]))
-    }
-    if (list[1].includes(".") == true) {
-        numArray.push(parseFloat(list[0]))
-    } else {
-    numArray.push(parseInt(list[1]))
-    }
-    
-    if (/[\+\-\/\*\.]/g.test(displayScreen.innerText.slice(-1)) == true) {
-        return;} else if (displayScreen.innerText.match(/\+/) == "+") {
-        displayScreen.innerText = add(numArray[0], numArray[1]);
-    } else if (displayScreen.innerText.match(/\-/) == "-") {
-        console.log(displayScreen.innerText = subtract(numArray[0], numArray[1]));
-    } else if (displayScreen.innerText.match(/\*/) == "*") {
-        displayScreen.innerText = multiply(numArray[0], numArray[1]);
-    } else if (displayScreen.innerText.match(/\//) == "/") {
-        displayScreen.innerText = divide(numArray[0], numArray[1]);
-    };
-    }
+    operandTwo = displayScreen.textContent
+    displayScreen.textContent = roundResult(operationType(operatorInMemory, operandOne, operandTwo))
+    operatorInMemory = null
+    operandOne = displayScreen.innerText
+    operandTwo = ""
+    }}
 
 function add(x, y) {
 	return x + y
